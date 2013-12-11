@@ -27,14 +27,14 @@ def GetCurrentUsers()
 
 end
 
-
 # :first_in sets how long it takes before the job is first run. In this case, it is run immediately
 SCHEDULER.every '1m', :first_in => 0 do |job|
-  
-  list = GetCurrentUsers()
-  sorted = list.sort_by{|e| -e[:value]}.slice(0, 10)
-  #File.open("/tmp/csv.file", 'a') { |f| f.write("\n") } 
-  #File.open("/tmp/csv.file", 'a') { |f| f.write(sorted) }
 
-  send_event('BiggestUsers', { items:  sorted})
+  list = GetCurrentUsers()
+  total_cores = list.inject(0) {|sum, hash| sum + hash[:value]}
+
+  dollar_amount = "$%.2f" % ((total_cores / 4) * 0.3)
+  
+  File.open("/tmp/csv.file", 'w') { |f| f.write(total_cores) }
+  send_event('HCCAmazonPrice', {current: dollar_amount})
 end
