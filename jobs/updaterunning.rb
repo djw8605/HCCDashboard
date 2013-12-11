@@ -42,15 +42,21 @@ SCHEDULER.every '15m', :first_in => 0 do |job|
   
   total_cores = GetCores('Tusker', t)
   last_cores = GetCores('Tusker', last_start, last_end)
-  send_event('TuskerRunning', { current:  total_cores, last: last_cores, last_period: 'yesterday'})
+  if total_cores > 0 and last_cores > 0
+    send_event('TuskerRunning', { current:  total_cores, last: last_cores, last_period: 'yesterday'})
+  end
 
   total_cores = GetCores('Crane', t)
   last_cores = GetCores('Crane', last_start, last_end)
-  send_event('CraneRunning', { current:  total_cores, last: last_cores, last_period: 'yesterday'})
+  if total_cores > 0 and last_cores > 0
+    send_event('CraneRunning', { current:  total_cores, last: last_cores, last_period: 'yesterday'})
+  end
 
   total_cores = GetCores('Sandhills', t)
   last_cores = GetCores('Sandhills', last_start, last_end)
-  send_event('SandhillsRunning', { current:  total_cores, last: last_cores, last_period: 'yesterday'})
+  if total_cores > 0 and last_cores > 0
+    send_event('SandhillsRunning', { current:  total_cores, last: last_cores, last_period: 'yesterday'})
+  end
 
   
 end
