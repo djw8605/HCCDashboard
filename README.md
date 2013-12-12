@@ -14,7 +14,7 @@ Install dashing with gems (requires 1.9+ ruby):
 You will also need to install node.js.  I installed it from the Linux 
 binaries tarball using the command:
 
-   tar xzvf <nodejs.tar.gz> --strip-components=1 -C /usr/local
+    tar xzvf <nodejs.tar.gz> --strip-components=1 -C /usr/local
 
 ## Configuration
 
