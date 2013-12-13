@@ -1,9 +1,19 @@
+formatAxis = `function(y) {
+    var abs_y = Math.abs(y);
+    if (abs_y >= 1125899906842624)  { return (y / 1125899906842624).toFixed(0) + "P" }
+    else if (abs_y >= 1099511627776){ return (y / 1099511627776).toFixed(0) + "T" }
+    else if (abs_y >= 1073741824)   { return (y / 1073741824).toFixed(0) + "G" }
+    else if (abs_y >= 1048576)      { return (y / 1048576).toFixed(0) + "M" }
+    else if (abs_y >= 1024)         { return (y / 1024).toFixed(0) + "K" }
+    else if (abs_y < 1 && y > 0)    { return y.toFixed(0) }
+    else if (abs_y === 0)           { return '' }
+    else                        { return y }
+}`
 
-
-class Dashing.Graph extends Dashing.Widget
+class Dashing.NetworkGraph extends Dashing.Widget
 
   bytesToSize: (bytes) ->
-    sizes = ['b', 'kb', 'mb', 'gb', 'tb'];
+    sizes = ['B', 'Kb', 'Mb', 'Gb', 'Tb'];
     if bytes == 0 
       return 'n/a';
     i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
@@ -14,6 +24,7 @@ class Dashing.Graph extends Dashing.Widget
     points = @get('points')
     if points
       this.bytesToSize(points[points.length - 1].y)
+
 
   ready: ->
     container = $(@node).parent()
@@ -36,11 +47,11 @@ class Dashing.Graph extends Dashing.Widget
     @graph.series[0].data = @get('points') if @get('points')
 
     x_axis = new Rickshaw.Graph.Axis.Time(graph: @graph)
-    y_axis = new Rickshaw.Graph.Axis.Y(graph: @graph, tickFormat: Rickshaw.Fixtures.Number.formatKMBT)
+    # y_axis = new Rickshaw.Graph.Axis.Y(graph: @graph, tickFormat: Rickshaw.Fixtures.Number.formatBase1024KMGTP)
+    y_axis = new Rickshaw.Graph.Axis.Y(graph: @graph, tickFormat: formatAxis)
     @graph.render()
 
   onData: (data) ->
     if @graph
-      debugger
       @graph.series[0].data = data.points
       @graph.render()

@@ -40,7 +40,7 @@ SCHEDULER.every '30m', :first_in => 0 do |job|
   #puts dbconf['rcfmysql_user']
   #puts dbconf['rcfmysql_pass']
   db = Mysql.new(dbconf['rcfmysql_host'], dbconf['rcfmysql_username'], dbconf['rcfmysql_pass'], dbconf['rcfmysql_db'])
-  sorted = list.sort_by{|e| -e[:value]}.slice(0, 20)
+  sorted = list.sort_by{|e| -e[:value]}.slice(0, 25)
   sorted.each_index do |index|
     query = "select Department, Campus from Personal where LoginID = '%{username}'" % { :username => sorted[index][:label] }
     #puts query

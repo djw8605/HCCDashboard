@@ -11,7 +11,7 @@ $tick-color:        rgba(0, 0, 0, 0.4);
 // ----------------------------------------------------------------------------
 // Widget-graph styles
 // ----------------------------------------------------------------------------
-.widget-graph {
+.widget-network-graph {
 
   background-color: $background-color;
   position: relative;
@@ -28,6 +28,7 @@ $tick-color:        rgba(0, 0, 0, 0.4);
   .title, .value {
     position: relative;
     z-index: 99;
+    text-transform: None;
   }
 
   .title {
