@@ -28,11 +28,11 @@ SCHEDULER.every '10m', :first_in => 0 do |job|
   used = used_json[0]["datapoints"].last[0]
   i = 1
   while used == "NaN" and i < used_json[0]["datapoints"].length
-    used = used_json[0]["datapoints"][used_json[0]["datapoints"].length - 1][0]
+    used = used_json[0]["datapoints"][used_json[0]["datapoints"].length - i][0]
     i += 1
   end
 
-  used = (used_json[0]["datapoints"].last[0]  / (1024)).round(1)
+  used = (used  / (1024)).round(1)
   send_event('RedStorage', { min: 0, max: capacity, value: used, moreinfo: 'Capacity: %{capacity}' % {:capacity => Filesize.from("#{capacity.to_s} TB").pretty} })
   send_event('HCCAmazonPrice', { redStorage: used } )
   

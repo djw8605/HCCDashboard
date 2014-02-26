@@ -23,6 +23,7 @@ SCHEDULER.every '6m', :first_in => 0 do |job|
   rrd = RRD::Base.new(tmp_file.path)
   
   points = []
+  last_point = 0
   min_point = 0
   rrd.fetch(:average).each do |line| 
      if line[1].class != String && line[1].nan? != true
@@ -30,10 +31,12 @@ SCHEDULER.every '6m', :first_in => 0 do |job|
          min_point = line[0].to_f
        end
        points << { x: line[0].to_f, y: (line[1].to_f + line[2].to_f)*8 }
+       last_point = (line[1].to_f + line[2].to_f)*8
      end
   end
   tmp_file.close
   tmp_file.unlink
 
   send_event('NetworkGraph', { points: points })
+  send_event('HCCAmazonPrice', { network_bandwidth: last_point })
 end
