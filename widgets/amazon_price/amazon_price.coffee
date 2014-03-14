@@ -46,7 +46,10 @@ calculate_storage = (total_tb) ->
   total_cost
 
 calculate_network = (total_bps) ->
-  total_gbs = (total_bps / 8589934592) * (30 * 24 * 60 * 60)
+  # Convert to gigabytes per second, then multiple to get per month
+  # 60 * 60 * 24 * 30
+  total_gbs = (total_bps * Number("1.16415322E-10")) * ( 60 * 60 * 24 * 30 )
+  # total_gbs = (total_bps / 8589934592) * (30 * 24 * 60 * 60) 
   total_cost = 0.0
 
   if total_gbs > 1
