@@ -11,37 +11,37 @@ calculate_storage = (total_tb) ->
   total_cost = 0.0
 
   if total_tb > 1
-    total_cost += 0.085 * 1024
+    total_cost += 0.03 * 1024
   else if total_tb > 0
-    total_cost += 0.085 * (1024 * total_tb)
+    total_cost += 0.03 * (1024 * total_tb)
   total_tb -= 1
 
   if total_tb > 49
-    total_cost += 0.075 * (1024 * 49)
+    total_cost += 0.0295 * (1024 * 49)
   else if total_tb > 0
-    total_cost += 0.075 * (1024 * total_tb)
+    total_cost += 0.0295 * (1024 * total_tb)
   total_tb -= 49
 
   if total_tb > 450
-    total_cost += 0.060 * (1024 * 450)
+    total_cost += 0.029 * (1024 * 450)
   else if total_tb > 0
-    total_cost += 0.060 * (1024 * total_tb)
+    total_cost += 0.029 * (1024 * total_tb)
   total_tb -= 450
   
   if total_tb > 500
-    total_cost += 0.055 * (1024 * 500)
+    total_cost += 0.0285 * (1024 * 500)
   else if total_tb > 0
-    total_cost += 0.055 * (1024 * total_tb)
+    total_cost += 0.0285 * (1024 * total_tb)
   total_tb -= 500
 
   if total_tb > 4000
-    total_cost += 0.051 * (1024 * 4000)
+    total_cost += 0.0280 * (1024 * 4000)
   else if total_tb > 0
-    total_cost += 0.051 * (1024 * total_tb)
+    total_cost += 0.0280 * (1024 * total_tb)
   total_tb -= 4000
 
   if total_tb > 0
-    total_cost += 0.043 * (1024 * total_tb)
+    total_cost += 0.0275 * (1024 * total_tb)
 
   total_cost
 
@@ -116,7 +116,7 @@ class Dashing.AmazonPrice extends Dashing.Widget
  
   @accessor 'current_hourly', ->
     if @get('total_cores')
-      @computing_cost = ((parseFloat(@get('total_cores')) / 4) * 0.3)
+      @computing_cost = ((parseFloat(@get('total_cores')) / 4) * 0.28)
 
     if @get('total_storage')
       @storage_cost = calculate_storage(parseFloat(@get('total_storage'))) / (30 * 24)
