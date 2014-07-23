@@ -8,10 +8,10 @@ def GetCores(cluster = nil, starttime = nil, endtime = nil)
   starttime_str = DateTime.parse(starttime.to_s).strftime('%Y-%m-%d%%20%H:%M:%S')
  
   if endtime == nil
-    url_raw = 'http://rcf-gratia.unl.edu/gratia/csv/status_vo?facility=%{cluster}&starttime=%{starttime}' % { :cluster => cluster, :starttime => starttime_str }
+    url_raw = 'http://hcc-gratia.unl.edu:8100/gratia/csv/status_vo?facility=%{cluster}&starttime=%{starttime}' % { :cluster => cluster, :starttime => starttime_str }
   else
     endtime_str = DateTime.parse(endtime.to_s).strftime('%Y-%m-%d%%20%H:%M:%S')
-    url_raw = 'http://rcf-gratia.unl.edu/gratia/csv/status_vo?facility=%{cluster}&starttime=%{starttime}&endtime=%{endtime}' % { :cluster => cluster, :starttime => starttime_str, :endtime => endtime_str }
+    url_raw = 'http://hcc-gratia.unl.edu:8100/gratia/csv/status_vo?facility=%{cluster}&starttime=%{starttime}&endtime=%{endtime}' % { :cluster => cluster, :starttime => starttime_str, :endtime => endtime_str }
   end
 
   uri = URI(url_raw)

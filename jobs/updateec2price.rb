@@ -9,7 +9,7 @@ def GetRunningCores()
   starttime_str = DateTime.parse(starttime.to_s).strftime('%Y-%m-%d %H:%M:%S')
   endtime_str = DateTime.parse(endtime.to_s).strftime('%Y-%m-%d %H:%M:%S')
 
-  url_raw = 'http://rcf-gratia.unl.edu/gratia/csv/status_vo?starttime=%{starttime}&endtime=%{endtime}' % { :starttime => starttime_str, :endtime => endtime_str }
+  url_raw = 'http://hcc-gratia.unl.edu:8100/gratia/csv/status_vo?starttime=%{starttime}&endtime=%{endtime}' % { :starttime => starttime_str, :endtime => endtime_str }
 
   uri = URI(URI.escape(url_raw))
   response = Net::HTTP.get_response(uri)
@@ -28,7 +28,7 @@ def GetRunningCores()
 end
 
 # :first_in sets how long it takes before the job is first run. In this case, it is run immediately
-SCHEDULER.every '2m', :first_in => 0 do |job|
+SCHEDULER.every '5m', :first_in => 0 do |job|
 
   list = GetRunningCores()
   total_cores = list.inject(0) {|sum, hash| sum + hash[:value]}

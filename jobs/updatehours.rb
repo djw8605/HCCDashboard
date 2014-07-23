@@ -10,7 +10,7 @@ def GetHours(starttime = Time.now.utc, endtime = nil, span = 86400)
   starttime_str = DateTime.parse(starttime.to_s).strftime('%Y-%m-%d%%20%H:%M:%S')
   endtime_str = DateTime.parse(endtime.to_s).strftime('%Y-%m-%d%%20%H:%M:%S')
 
-  url_raw = 'http://rcf-gratia.unl.edu/gratia/csv/vo_facility_hours_bar_smry?starttime=%{starttime}&endtime=%{endtime}&span=%{span}' % { :starttime => starttime_str, :endtime => endtime_str, :span => span }
+  url_raw = 'http://hcc-gratia.unl.edu:8100/gratia/csv/vo_facility_hours_bar_smry?starttime=%{starttime}&endtime=%{endtime}&span=%{span}' % { :starttime => starttime_str, :endtime => endtime_str, :span => span }
 
   uri = URI(url_raw)
   response = Net::HTTP.get_response(uri)

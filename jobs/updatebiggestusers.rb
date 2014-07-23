@@ -9,7 +9,7 @@ def GetCurrentUsers()
   starttime_str = DateTime.parse(starttime.to_s).strftime('%Y-%m-%d %H:%M:%S')
   endtime_str = DateTime.parse(endtime.to_s).strftime('%Y-%m-%d %H:%M:%S')
 
-  url_raw = 'http://rcf-gratia.unl.edu/gratia/csv/status_vo?starttime=%{starttime}&endtime=%{endtime}&excludevo=nanohub|cmsprod|engage|ligo|dzero|uscms|Cusatlas|osg|sbgrid|glow|fermilab|ucsdgrid' % { :starttime => starttime_str, :endtime => endtime_str }
+  url_raw = 'http://hcc-gratia.unl.edu:8100/gratia/csv/status_vo?starttime=%{starttime}&endtime=%{endtime}&excludevo=nanohub|cmsprod|engage|ligo|dzero|uscms|Cusatlas|osg|sbgrid|glow|fermilab|ucsdgrid' % { :starttime => starttime_str, :endtime => endtime_str }
   
   uri = URI(URI.escape(url_raw))
   File.open("/tmp/csv.file", 'w') { |f| f.write(url_raw) }
