@@ -49,26 +49,32 @@ SCHEDULER.every '6m', :first_in => 0 do |job|
      end
   end
 
+  #network_debug.puts points
   counter = 0
   rrd2.fetch(:average).each do |line|
      if line[1].class != String && line[1].nan? != true
        if min_point == 0
          min_point = line[0].to_f
        end
-       counter = 0
-       while points[counter][:x] != line[0].to_f do
-         #network_debug.puts "Incrementing counter #{points[counter][:x]} != #{line[0].to_f}" 
-         counter += 1
-       end
-       if points[counter][:x] == line[0].to_f 
-         #network_debug.puts "Found an equal: #{points[counter][:x]} = #{line[0].to_f}"
-       else
-         next
-       end
-       #network_debug.puts "Before add: #{points[counter][:y]}"
+       # The RRD's no longer line up on timestamps.
+       #network_debug.puts "Points = #{points}"
+       #network_debug.puts "counter = #{counter}"
+       #network_debug.puts "line[0] = #{line[0]}"
+       #while points[counter][:x] != line[0].to_f do
+       #  network_debug.puts "Incrementing counter #{points[counter][:x]} != #{line[0].to_f}"
+       #  if 
+       #  counter += 1
+       #end
+       #if points[counter][:x] == line[0].to_f 
+       #  network_debug.puts "Found an equal: #{points[counter][:x]} = #{line[0].to_f}"
+       #else
+       #  next
+       #end
+       network_debug.puts "Before add: #{points[counter][:y]}"
        points[counter][:y] += ( line[1].to_f + line[2].to_f)*8
-       #network_debug.puts "After add: #{points[counter][:y]}"
+       network_debug.puts "After add: #{points[counter][:y]}"
        last_point = points[counter][:y]
+       counter += 1
      end
   end
 
