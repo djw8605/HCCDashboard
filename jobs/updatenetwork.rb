@@ -1,14 +1,38 @@
 def getRRD(url)
   require 'tempfile'
   require 'net/http'
+  require 'openssl'
+  require 'httpclient'
+
+  #ssl_context = OpenSSL::SSL::SSLContext.new()
+  #ssl_context.ssl_version = :TLSv1_client
+  #print ssl_context.ciphers()
+  #print "\n"
+  #print OpenSSL::SSL::SSLContext::METHODS
+  #print "\n"
   
   # First, create a temporary file
+  print "\n"
   tmp_file = Tempfile.new('rrd') 
-  uri = URI(url)
-  req = req = Net::HTTP::Get.new(uri.path)
-  response = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https', :verify_mode => OpenSSL::SSL::VERIFY_NONE) do |https|
-    https.request(req)
-  end
+  #uri = URI(url)
+  #req = Net::HTTP::Get.new(uri.path)
+  #sock = Net::HTTP.new(uri.host, uri.port)
+  #sock.use_ssl = true
+  #sock.ssl_version = "TLSv1"
+  #sock.start do |https|
+  #  response = https.request(req)
+  #end  
+  c = HTTPClient.new
+  #c.ssl_config.ssl_version = :SSLv23
+  #c.ssl_config.ssl_version = :TLSv1
+  #c.ssl_config.options |= OpenSSL::SSL::OP_NO_SSLv3
+  c.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  response = c.get(url)
+  #response = 
+  
+  #response = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https', :verify_mode => OpenSSL::SSL::VERIFY_NONE, :ssl_version => "TLSv1") do |https|
+  #  https.request(req)
+  #end
 
   tmp_file.write(response.body)
 
@@ -32,9 +56,10 @@ SCHEDULER.every '6m', :first_in => 0 do |job|
   rrd2 = RRD::Base.new(rrd2_tmp.path)
   rrd3 = RRD::Base.new(rrd3_tmp.path)
  
-  #network_debug = File.open("/tmp/networkdebug", 'w') 
-  #network_debug.puts "Path = #{rrd3_tmp.path}"
-  #network_debug.puts "RRD = #{rrd3}"
+  network_debug = File.open("/tmp/networkdebug", 'w') 
+  network_debug.puts "Path = #{rrd3_tmp.path}"
+  network_debug.puts "RRD = #{rrd2.info.to_yaml}"
+  network_debug.close
 
   points = []
   last_point = 0
@@ -48,6 +73,7 @@ SCHEDULER.every '6m', :first_in => 0 do |job|
        last_point = (line[1].to_f + line[2].to_f)*8
      end
   end
+
 
   #network_debug.puts points
   counter = 0
@@ -70,9 +96,9 @@ SCHEDULER.every '6m', :first_in => 0 do |job|
        #else
        #  next
        #end
-       network_debug.puts "Before add: #{points[counter][:y]}"
+       #network_debug.puts "Before add: #{points[counter][:y]}"
        points[counter][:y] += ( line[1].to_f + line[2].to_f)*8
-       network_debug.puts "After add: #{points[counter][:y]}"
+       #network_debug.puts "After add: #{points[counter][:y]}"
        last_point = points[counter][:y]
        counter += 1
      end
@@ -84,23 +110,22 @@ SCHEDULER.every '6m', :first_in => 0 do |job|
        if min_point == 0
          min_point = line[0].to_f
        end
-       counter = 0
-       while points[counter][:x] != line[0].to_f do
-         #network_debug.puts "Incrementing counter #{points[counter][:x]} != #{line[0].to_f}" 
-         counter += 1
-       end
-       if points[counter][:x] == line[0].to_f 
+       #while points[counter][:x] != line[0].to_f do
+       #  #network_debug.puts "Incrementing counter #{points[counter][:x]} != #{line[0].to_f}" 
+       #  counter += 1
+       #end
+       #if points[counter][:x] == line[0].to_f 
          #network_debug.puts "Found an equal: #{points[counter][:x]} = #{line[0].to_f}"
-       else
-         next
-       end
+       #else
+       #  next
+       #end
        #network_debug.puts "Before add: #{points[counter][:y]}"
        points[counter][:y] += ( line[1].to_f + line[2].to_f)*8
        #network_debug.puts "After add: #{points[counter][:y]}"
        last_point = points[counter][:y]
+       counter += 1
      end
   end
-
   
   #network_debug.close
 

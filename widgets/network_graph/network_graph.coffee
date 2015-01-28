@@ -21,7 +21,7 @@ class Dashing.NetworkGraph extends Dashing.Widget
 
   @accessor 'current', ->
     return @get('displayedValue') if @get('displayedValue')
-    points = @get('points')
+    points = @get('points')[-20..]
     if points
       this.bytesToSize(points[points.length - 1].y)
 
@@ -44,7 +44,7 @@ class Dashing.NetworkGraph extends Dashing.Widget
       ]
     )
 
-    @graph.series[0].data = @get('points') if @get('points')
+    @graph.series[0].data = @get('points')[-20..] if @get('points')
 
     x_axis = new Rickshaw.Graph.Axis.Time(graph: @graph)
     # y_axis = new Rickshaw.Graph.Axis.Y(graph: @graph, tickFormat: Rickshaw.Fixtures.Number.formatBase1024KMGTP)
@@ -53,6 +53,6 @@ class Dashing.NetworkGraph extends Dashing.Widget
 
   onData: (data) ->
     if @graph
-      @graph.series[0].data = data.points
+      @graph.series[0].data = data.points[-20..]
       @graph.render()
     $(@node).fadeOut().fadeIn()
