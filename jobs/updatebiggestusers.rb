@@ -12,10 +12,10 @@ def GetCurrentUsers()
   url_raw = 'http://hcc-gratia.unl.edu:8100/gratia/csv/status_vo?starttime=%{starttime}&endtime=%{endtime}&excludevo=nanohub|cmsprod|engage|ligo|dzero|uscms|Cusatlas|osg|sbgrid|glow|fermilab|ucsdgrid' % { :starttime => starttime_str, :endtime => endtime_str }
   
   uri = URI(URI.escape(url_raw))
-  File.open("/tmp/csv.file", 'w') { |f| f.write(url_raw) }
+  #File.open("/tmp/csv.file", 'w') { |f| f.write(url_raw) }
   response = Net::HTTP.get_response(uri)
 
-  File.open("/tmp/csv.file", 'a') { |f| f.write(response.body) }
+  #File.open("/tmp/csv.file", 'a') { |f| f.write(response.body) }
 
   list = []
   CSV.parse(response.body, { :headers => :first_row} ) do |row|
